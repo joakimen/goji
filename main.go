@@ -76,12 +76,12 @@ func SearchJiraIssues(jira JiraCreds, j *JiraSearchResults) error {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("error fetching jira issues: %v", err)
+		return fmt.Errorf("error fetching jira issues: %w", err)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("error reading response body: %v", err)
+		return fmt.Errorf("error reading response body: %w", err)
 	}
 
 	defer func(Body io.ReadCloser) {
@@ -93,7 +93,7 @@ func SearchJiraIssues(jira JiraCreds, j *JiraSearchResults) error {
 
 	err = json.Unmarshal(body, j)
 	if err != nil {
-		return err
+		return fmt.Errorf("error unmarshaling response body: %w", err)
 	}
 	return nil
 }
