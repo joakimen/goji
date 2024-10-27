@@ -2,30 +2,20 @@ package main
 
 import (
 	"fmt"
-	"github.com/joakimen/goji/pkg/jira"
-	"log"
 	"os"
+
+	"github.com/joakimen/goji/cmd"
 )
 
 func main() {
-
-	apiCredentials := jira.APICredentials{
-		User:  RequireEnv("JIRA_API_USER"),
-		Token: RequireEnv("JIRA_API_TOKEN"),
-		Host:  RequireEnv("JIRA_HOST"),
-	}
-
-	issues, err := jira.Search(apiCredentials)
-	if err != nil {
-		log.Fatalf("error fetching jira issues: %v", err)
-	}
-	fmt.Println(issues)
+	run(os.Args)
 }
 
-func RequireEnv(key string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		log.Fatalf("missing required environment variable: %s", key)
+func run(args []string) {
+	app := cmd.NewApp()
+	err := app.Run(args)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: %s\n", err)
+		os.Exit(1)
 	}
-	return value
 }
