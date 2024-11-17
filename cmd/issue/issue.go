@@ -41,7 +41,6 @@ func List(projectID string, jsonOutput bool, all bool, mine bool, limit int) err
 		}
 		fmt.Println(issuesJsonPretty)
 	} else {
-		format.PrintHeader()
 		for _, issue := range issues {
 			fmt.Println(format.FormatItem(
 				issue.Key,
