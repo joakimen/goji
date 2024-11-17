@@ -1,5 +1,7 @@
 # goji
 
+[![CI](https://github.com/joakimen/goji/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimen/goji/actions/workflows/ci.yml)
+
 CLI for listing various Jira issue types.
 
 ## CLI Surface
