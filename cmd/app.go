@@ -41,6 +41,13 @@ func NewApp() cli.App {
 							return auth.Show()
 						},
 					},
+					{
+						Name:  "status",
+						Usage: "Show authentication status",
+						Action: func(cCtx *cli.Context) error {
+							return auth.Status()
+						},
+					},
 				},
 			},
 			{
