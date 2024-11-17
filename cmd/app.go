@@ -71,8 +71,9 @@ func NewApp() cli.App {
 								Aliases: []string{"p"},
 							},
 							&cli.BoolFlag{
-								Name:  "all",
-								Usage: "Return both resolved and unresolved epics",
+								Name:    "all",
+								Usage:   "Return both resolved and unresolved epics",
+								Aliases: []string{"a"},
 							},
 							&cli.BoolFlag{
 								Name:    "json",
@@ -96,8 +97,40 @@ func NewApp() cli.App {
 						Name:  "list",
 						Usage: "List issues",
 						Action: func(cCtx *cli.Context) error {
-							issue.List()
-							return nil
+							projectId := cCtx.String("project")
+							jsonOutput := cCtx.Bool("json")
+							all := cCtx.Bool("all")
+							mine := cCtx.Bool("mine")
+							limit := cCtx.Int("limit")
+							return issue.List(projectId, jsonOutput, all, mine, limit)
+						},
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:    "project",
+								Usage:   "Project key",
+								Aliases: []string{"p"},
+							},
+							&cli.BoolFlag{
+								Name:    "all",
+								Usage:   "Return both resolved and unresolved issues",
+								Aliases: []string{"a"},
+							},
+							&cli.BoolFlag{
+								Name:    "json",
+								Usage:   "Output as JSON",
+								Aliases: []string{"j"},
+							},
+							&cli.BoolFlag{
+								Name:    "mine",
+								Usage:   "Return only issues assigned to the current user",
+								Aliases: []string{"m"},
+							},
+							&cli.IntFlag{
+								Name:    "limit",
+								Usage:   "Maximum number of issues to return",
+								Value:   50,
+								Aliases: []string{"l"},
+							},
 						},
 					},
 				},

@@ -73,3 +73,58 @@ func ListEpics(jiraClient *jira.Client, projectID string, all bool, mine bool) (
 	}
 	return epics, nil
 }
+
+type Issue struct {
+	Key     string
+	Summary string
+	Created time.Time
+	Status  string
+	Type    string
+}
+
+func NewIssue(issue jira.Issue) Issue {
+	return Issue{
+		Key:     issue.Key,
+		Summary: issue.Fields.Summary,
+		Created: time.Time(issue.Fields.Created),
+		Status:  issue.Fields.Status.Name,
+		Type:    issue.Fields.Type.Name,
+	}
+}
+
+func ListIssues(jiraClient *jira.Client, projectID string, all bool, mine bool, limit int) ([]Issue, error) {
+	jql := fmt.Sprintf("project = %s AND issuetype != Epic", projectID)
+	if !all {
+		jql += " AND resolution = Unresolved"
+	}
+
+	if mine {
+		jql += " AND assignee = currentUser()"
+	}
+
+	opts := &jira.SearchOptions{
+		StartAt:    0,
+		MaxResults: limit,
+		Fields:     []string{"key", "summary", "created", "status", "issuetype"},
+	}
+
+	var issues []Issue
+	for {
+		searchResults, resp, err := jiraClient.Issue.Search(context.Background(), jql, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed when searching for issues for projectID '%s': %w", projectID, err)
+		}
+		for _, issue := range searchResults {
+			issues = append(issues, NewIssue(issue))
+		}
+		if resp.StartAt+resp.MaxResults >= resp.Total || len(issues) >= limit {
+			break
+		}
+		opts.StartAt += opts.MaxResults
+	}
+
+	if len(issues) > limit {
+		issues = issues[:limit]
+	}
+	return issues, nil
+}
