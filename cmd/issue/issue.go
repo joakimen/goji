@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/joakimen/goji/pkg/auth"
+	"github.com/joakimen/goji/pkg/format"
 	"github.com/joakimen/goji/pkg/jira"
 	"github.com/joakimen/goji/pkg/json"
 )
@@ -40,8 +41,14 @@ func List(projectID string, jsonOutput bool, all bool, mine bool, limit int) err
 		}
 		fmt.Println(issuesJsonPretty)
 	} else {
+		format.PrintHeader()
 		for _, issue := range issues {
-			fmt.Printf("[%s] [%s] %s (%s)\n", issue.Key, issue.Status, issue.Summary, issue.Created)
+			fmt.Println(format.FormatItem(
+				issue.Key,
+				issue.Status,
+				issue.Summary,
+				issue.Created,
+			))
 		}
 	}
 	fmt.Fprintln(stderr, "Done listing issues")

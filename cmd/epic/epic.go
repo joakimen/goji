@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/joakimen/goji/pkg/auth"
+	"github.com/joakimen/goji/pkg/format"
 	"github.com/joakimen/goji/pkg/jira"
 	"github.com/joakimen/goji/pkg/json"
 )
@@ -39,7 +40,12 @@ func List(projectID string, jsonOutput bool, all bool, mine bool) error {
 		fmt.Println(epicsJsonPretty)
 	} else {
 		for _, epic := range epics {
-			fmt.Printf("[%s] [%s] %s (%s)\n", epic.Key, epic.Status, epic.Summary, epic.Created)
+			fmt.Println(format.FormatItem(
+				epic.Key,
+				epic.Status,
+				epic.Summary,
+				epic.Created,
+			))
 		}
 	}
 	fmt.Fprintln(stderr, "Done listing epics")
