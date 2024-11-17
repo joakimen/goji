@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Install gofumpt
+        run: go install mvdan.cc/gofumpt@latest
+
+      - name: Format check
+        run: |
+          gofumpt -l .
+          test -z "$(gofumpt -l .)"
+
+      - name: lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
+
+      - name: Lint
+        run: golangci-lint run
+
+      - name: Test
+        run: go test -v ./...
+
+      - name: Build
+        run: |
+          mkdir -p bin
+          go build -o bin/goji .
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: goji
+          path: bin/goji
