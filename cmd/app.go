@@ -7,6 +7,8 @@ import (
 
 	"github.com/joakimen/goji/cmd/issue"
 
+	"github.com/joakimen/goji/cmd/bug"
+
 	"github.com/urfave/cli/v2"
 
 	"github.com/joakimen/goji/pkg/config"
@@ -135,6 +137,52 @@ func NewApp() cli.App {
 							&cli.IntFlag{
 								Name:    "limit",
 								Usage:   "Maximum number of issues to return",
+								Value:   50,
+								Aliases: []string{"l"},
+							},
+						},
+					},
+				},
+			},
+			{
+				Name:  "bug",
+				Usage: "Manage bugs",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "list",
+						Usage: "List bugs",
+						Action: func(cCtx *cli.Context) error {
+							projectId := cCtx.String("project")
+							jsonOutput := cCtx.Bool("json")
+							all := cCtx.Bool("all")
+							mine := cCtx.Bool("mine")
+							limit := cCtx.Int("limit")
+							return bug.List(projectId, jsonOutput, all, mine, limit)
+						},
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:    "project",
+								Usage:   "Project key",
+								Aliases: []string{"p"},
+							},
+							&cli.BoolFlag{
+								Name:    "all",
+								Usage:   "Return both resolved and unresolved bugs",
+								Aliases: []string{"a"},
+							},
+							&cli.BoolFlag{
+								Name:    "json",
+								Usage:   "Output as JSON",
+								Aliases: []string{"j"},
+							},
+							&cli.BoolFlag{
+								Name:    "mine",
+								Usage:   "Return only bugs assigned to the current user",
+								Aliases: []string{"m"},
+							},
+							&cli.IntFlag{
+								Name:    "limit",
+								Usage:   "Maximum number of bugs to return",
 								Value:   50,
 								Aliases: []string{"l"},
 							},

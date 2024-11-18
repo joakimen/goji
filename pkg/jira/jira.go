@@ -92,6 +92,43 @@ func NewIssue(issue jira.Issue) Issue {
 	}
 }
 
+func ListBugs(jiraClient *jira.Client, projectID string, all bool, mine bool, limit int) ([]Issue, error) {
+	jql := fmt.Sprintf("project = %s AND issuetype = Bug", projectID)
+	if !all {
+		jql += " AND resolution = Unresolved"
+	}
+
+	if mine {
+		jql += " AND assignee = currentUser()"
+	}
+
+	opts := &jira.SearchOptions{
+		StartAt:    0,
+		MaxResults: limit,
+		Fields:     []string{"key", "summary", "created", "status", "issuetype"},
+	}
+
+	var bugs []Issue
+	for {
+		searchResults, resp, err := jiraClient.Issue.Search(context.Background(), jql, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed when searching for bugs for projectID '%s': %w", projectID, err)
+		}
+		for _, issue := range searchResults {
+			bugs = append(bugs, NewIssue(issue))
+		}
+		if resp.StartAt+resp.MaxResults >= resp.Total || len(bugs) >= limit {
+			break
+		}
+		opts.StartAt += opts.MaxResults
+	}
+
+	if len(bugs) > limit {
+		bugs = bugs[:limit]
+	}
+	return bugs, nil
+}
+
 func ListIssues(jiraClient *jira.Client, projectID string, all bool, mine bool, limit int) ([]Issue, error) {
 	jql := fmt.Sprintf("project = %s AND issuetype != Epic", projectID)
 	if !all {

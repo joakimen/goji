@@ -25,6 +25,13 @@ CLI for listing various Jira issue types.
       - `-j, --json`: Output as JSON
       - `-m, --mine`: Return only issues assigned to the current user
       - `-l, --limit`: Maximum number of issues to return (default: 50)
+  - `bug`
+    - `list [flags]`
+      - `-p, --project`: Project key
+      - `-a, --all`: Return both resolved and unresolved bugs
+      - `-j, --json`: Output as JSON
+      - `-m, --mine`: Return only bugs assigned to the current user
+      - `-l, --limit`: Maximum number of bugs to return (default: 50)
 
 ## Authentication
 
