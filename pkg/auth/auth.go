@@ -76,3 +76,11 @@ func SetCredentials(creds Credentials) error {
 	}
 	return nil
 }
+
+func RemoveCredentials() error {
+	err := keyring.Delete(KeyringCfg.Service, KeyringCfg.Item)
+	if err != nil {
+		return fmt.Errorf("failed to remove credentials from keyring: %w", err)
+	}
+	return nil
+}

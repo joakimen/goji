@@ -48,6 +48,13 @@ func NewApp() cli.App {
 							return auth.Status()
 						},
 					},
+					{
+						Name:  "logout",
+						Usage: "Remove stored Jira credentials",
+						Action: func(cCtx *cli.Context) error {
+							return auth.Logout()
+						},
+					},
 				},
 			},
 			{

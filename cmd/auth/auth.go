@@ -73,3 +73,12 @@ func Status() error {
 	fmt.Printf("✅ Authenticated as %s\n", creds.Username)
 	return nil
 }
+
+func Logout() error {
+	err := auth.RemoveCredentials()
+	if err != nil {
+		return fmt.Errorf("failed to remove credentials: %w", err)
+	}
+	fmt.Println("✅ Credentials removed successfully")
+	return nil
+}
