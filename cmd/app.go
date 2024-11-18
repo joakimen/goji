@@ -28,7 +28,7 @@ func NewApp() cli.App {
 				Usage: "Manage Jira credentials",
 				Subcommands: []*cli.Command{
 					{
-						Name:  "add",
+						Name:  "login",
 						Usage: "Add Jira credentials to the system keyring",
 						Action: func(cCtx *cli.Context) error {
 							return auth.Login()

@@ -8,7 +8,7 @@ CLI for listing various Jira issue types.
 
 - `goji`
   - `auth`
-    - `add`: Add Jira credentials to the system keyring
+    - `login`: Add Jira credentials to the system keyring
     - `show`: Show stored credentials
     - `status`: Show authentication status
   - `epic`
