@@ -1,6 +1,6 @@
 # goji
 
-[![CI](https://github.com/joakimen/goji/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimen/goji/actions/workflows/ci.yml)
+[![CI](https://github.com/joakimen/goji/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimen/goji/actions/workflows/ci.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/joakimen/goji)](https://goreportcard.com/report/github.com/joakimen/goji)
 
 CLI for listing various Jira issue types.
 
